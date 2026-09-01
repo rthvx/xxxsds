@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RTHVX Digital</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#05060b;
+    color:white;
+}
+
+nav{
+    height:72px;
+    padding:0 7%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#080910;
+    border-bottom:1px solid #202434;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:900;
+}
+
+.logo span{
+    color:#a855f7;
+}
+
+.nav-right{
+    display:flex;
+    gap:10px;
+}
+
+button{
+    border:0;
+    border-radius:8px;
+    padding:12px 20px;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.primary{
+    background:linear-gradient(135deg,#6d28d9,#a855f7);
+}
+
+.secondary{
+    background:#151927;
+    border:1px solid #303548;
+}
+
+.logout{
+    background:#281219;
+    color:#ff7b88;
+}
+
+.hero{
+    min-height:580px;
+    padding:80px 7%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:radial-gradient(
+        circle at 50% 40%,
+        rgba(124,58,237,.28),
+        transparent 40%
+    );
+}
+
+.badge{
+    padding:8px 15px;
+    border:1px solid #542c7d;
+    border-radius:30px;
+    color:#c4b5fd;
+    background:#130d21;
+    font-size:12px;
+    margin-bottom:22px;
+}
+
+.hero h1{
+    font-size:60px;
+    max-width:850px;
+}
+
+.hero h1 span{
+    color:#a855f7;
+}
+
+.hero p{
+    color:#85899b;
+    max-width:650px;
+    margin-top:20px;
+    line-height:1.7;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    margin-top:30px;
+}
+
+.section{
+    padding:80px 7%;
+}
+
+.title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.title h2{
+    font-size:35px;
+}
+
+.title span{
+    color:#a855f7;
+}
+
+.products{
+    max-width:1100px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.product{
+    background:#0d1019;
+    border:1px solid #202434;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.product-img{
+    height:180px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#15182b,#32106b);
+    font-size:25px;
+    font-weight:bold;
+}
+
+.product-info{
+    padding:20px;
+}
+
+.product-info p{
+    color:#777d90;
+    margin-top:8px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.price{
+    margin-top:15px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.buy{
+    width:100%;
+    margin-top:15px;
+    background:#7c3aed;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.85);
+    align-items:center;
+    justify-content:center;
+    z-index:5000;
+}
+
+.box{
+    width:400px;
+    max-width:92%;
+    padding:30px;
+    background:#0d1019;
+    border:1px solid #303548;
+    border-radius:16px;
+}
+
+.box h2{
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.sub{
+    text-align:center;
+    color:#777d90;
+    font-size:13px;
+    margin-bottom:22px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    margin-bottom:13px;
+    background:#070910;
+    border:1px solid #292d3d;
+    border-radius:7px;
+    color:white;
+    outline:none;
+}
+
+input:focus{
+    border-color:#8b5cf6;
+}
+
+.submit{
+    width:100%;
+    background:linear-gradient(135deg,#6d28d9,#a855f7);
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:22px;
+    color:#888;
+}
+
+.error{
+    color:#ff6d78;
+    text-align:center;
+    font-size:13px;
+    margin-top:12px;
+}
+
+.success{
+    color:#6ee7a0;
+    text-align:center;
+    font-size:13px;
+    margin-top:12px;
+}
+
+.account{
+    background:#111522;
+    padding:15px;
+    border-radius:9px;
+    line-height:2;
+    color:#aaaebe;
+}
+
+.account b{
+    color:#c4b5fd;
+}
+
+@media(max-width:800px){
+    .hero h1{
+        font-size:43px;
+    }
+
+    .products{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .hero h1{
+        font-size:36px;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        width:100%;
+    }
+
+    .hero-buttons button{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        <span>RTHVX</span> DIGITAL
+    </div>
+
+    <div class="nav-right" id="navRight"></div>
+
+</nav>
+
+
+<section class="hero">
+
+    <div class="badge">
+        ✦ PREMIUM DIGITAL MARKETPLACE
+    </div>
+
+    <h1>
+        Digital Products For Your
+        <span>Success</span>
+    </h1>
+
+    <p>
+        Discover premium digital products,
+        resources and tools designed to help
+        you learn, create and grow.
+    </p>
+
+    <div class="hero-buttons">
+
+        <button
+            class="primary"
+            onclick="openRegister()"
+            id="createBtn">
+            Create Account
+        </button>
+
+        <button
+            class="secondary"
+            onclick="scrollProducts()">
+            Explore Products
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="section" id="products">
+
+    <div class="title">
+
+        <h2>
+            Featured <span>Products</span>
+        </h2>
+
+        <p style="color:#777d90;margin-top:10px">
+            Premium digital products
+        </p>
+
+    </div>
+
+
+    <div class="products">
+
+        <div class="product">
+
+            <div class="product-img">
+                📈 DIGITAL MARKETING
+            </div>
+
+            <div class="product-info">
+
+                <h3>
+                    Digital Marketing Playbook
+                </h3>
+
+                <p>
+                    Complete digital marketing guide.
+                </p>
+
+                <div class="price">
+                    ₹499
+                </div>
+
+                <button
+                    class="buy"
+                    onclick="buyProduct()">
+                    Buy Now
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="product">
+
+            <div class="product-img">
+                🎨 UI / UX COURSE
+            </div>
+
+            <div class="product-info">
+
+                <h3>
+                    UI/UX Master Course
+                </h3>
+
+                <p>
+                    Learn modern UI/UX design.
+                </p>
+
+                <div class="price">
+                    ₹999
+                </div>
+
+                <button
+                    class="buy"
+                    onclick="buyProduct()">
+                    Buy Now
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="product">
+
+            <div class="product-img">
+                📱 INSTAGRAM PACK
+            </div>
+
+            <div class="product-info">
+
+                <h3>
+                    500+ Instagram Templates
+                </h3>
+
+                <p>
+                    Ready-to-use creator templates.
+                </p>
+
+                <div class="price">
+                    ₹299
+                </div>
+
+                <button
+                    class="buy"
+                    onclick="buyProduct()">
+                    Buy Now
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer style="
+padding:40px;
+text-align:center;
+border-top:1px solid #202434;
+color:#626777;
+">
+
+    <b>
+        <span style="color:#a855f7">RTHVX</span> DIGITAL
+    </b>
+
+    <br><br>
+
+    © 2026 RTHVX Digital
+
+</footer>
+
+
+<!-- REGISTER -->
+
+<div class="modal" id="registerModal">
+
+    <div class="box">
+
+        <span
+            class="close"
+            onclick="closeRegister()">
+            ×
+        </span>
+
+        <h2>Create Account</h2>
+
+        <div class="sub">
+            Register on RTHVX Digital
+        </div>
+
+        <input
+            id="regName"
+            placeholder="Full Name"
+        >
+
+        <input
+            id="regEmail"
+            type="email"
+            placeholder="Email Address"
+        >
+
+        <input
+            id="regPassword"
+            type="password"
+            placeholder="Create Password"
+        >
+
+        <button
+            class="submit"
+            onclick="registerUser()">
+            Create Account
+        </button>
+
+        <div
+            class="error"
+            id="registerError">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div class="modal" id="loginModal">
+
+    <div class="box">
+
+        <span
+            class="close"
+            onclick="closeLogin()">
+            ×
+        </span>
+
+        <h2>Welcome Back 👋</h2>
+
+        <div class="sub">
+            Login to your RTHVX account
+        </div>
+
+        <input
+            id="loginEmail"
+            type="email"
+            placeholder="Email Address"
+        >
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="Password"
+        >
+
+        <button
+            class="submit"
+            onclick="loginUser()">
+            Login
+        </button>
+
+        <div
+            class="error"
+            id="loginError">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ACCOUNT -->
+
+<div class="modal" id="accountModal">
+
+    <div class="box">
+
+        <span
+            class="close"
+            onclick="closeAccount()">
+            ×
+        </span>
+
+        <h2>👤 My Account</h2>
+
+        <br>
+
+        <div
+            class="account"
+            id="accountInfo">
+        </div>
+
+        <br>
+
+        <button
+            class="submit"
+            onclick="logoutUser()">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ===============================
+   SUPABASE
+================================ */
+
+const SUPABASE_URL =
+"https://hrnupywlwoxjucwouyiz.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_IyO3CEUcgI2BVfvHadUCIw_WurVZN0J";
+
+const supabaseClient =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+/* ===============================
+   REGISTER
+================================ */
+
+async function registerUser(){
+
+    const name =
+        document.getElementById("regName")
+        .value.trim();
+
+    const email =
+        document.getElementById("regEmail")
+        .value.trim();
+
+    const password =
+        document.getElementById("regPassword")
+        .value;
+
+    const error =
+        document.getElementById("registerError");
+
+    error.innerText = "";
+
+    if(!name || !email || !password){
+
+        error.innerText =
+            "Sabhi fields fill karo.";
+
+        return;
+    }
+
+    if(password.length < 6){
+
+        error.innerText =
+            "Password kam se kam 6 characters ka hona chahiye.";
+
+        return;
+    }
+
+
+    const { data, error:authError } =
+        await supabaseClient.auth.signUp({
+
+            email:email,
+
+            password:password,
+
+            options:{
+                data:{
+                    full_name:name
+                }
+            }
+
+        });
+
+
+    if(authError){
+
+        error.innerText =
+            authError.message;
+
+        return;
+    }
+
+
+    if(data.user){
+
+        const userID =
+            "RTHVX" +
+            Math.floor(
+                100000 +
+                Math.random() * 900000
+            );
+
+
+        const { error:profileError } =
+            await supabaseClient
+            .from("profiles")
+            .insert({
+
+                id:data.user.id,
+
+                user_id:userID,
+
+                full_name:name,
+
+                role:"user"
+
+            });
+
+
+        if(profileError){
+
+            error.innerText =
+                profileError.message;
+
+            return;
+        }
+
+
+        error.className = "success";
+
+        error.innerText =
+            "Account created successfully. Email verify karke login karo.";
+
+    }
+
+}
+
+
+/* ===============================
+   LOGIN
+================================ */
+
+async function loginUser(){
+
+    const email =
+        document.getElementById("loginEmail")
+        .value.trim();
+
+    const password =
+        document.getElementById("loginPassword")
+        .value;
+
+    const error =
+        document.getElementById("loginError");
+
+    error.innerText = "";
+
+    const { data, error:loginError } =
+        await supabaseClient.auth.signInWithPassword({
+
+            email:email,
+
+            password:password
+
+        });
+
+
+    if(loginError){
+
+        error.innerText =
+            loginError.message;
+
+        return;
+    }
+
+
+    closeLogin();
+
+    await updateUI();
+
+    alert("Login successful!");
+}
+
+
+/* ===============================
+   USER DATA
+================================ */
+
+async function getCurrentUser(){
+
+    const {
+        data:{
+            user
+        }
+    } =
+    await supabaseClient.auth.getUser();
+
+    return user;
+}
+
+
+/* ===============================
+   PROFILE
+================================ */
+
+async function getProfile(){
+
+    const user =
+        await getCurrentUser();
+
+    if(!user){
+        return null;
+    }
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id",user.id)
+    .single();
+
+    if(error){
+        console.log(error);
+        return null;
+    }
+
+    return data;
+}
+
+
+/* ===============================
+   NAVBAR
+================================ */
+
+async function updateUI(){
+
+    const nav =
+        document.getElementById("navRight");
+
+    const createBtn =
+        document.getElementById("createBtn");
+
+    const user =
+        await getCurrentUser();
+
+
+    if(!user){
+
+        createBtn.style.display =
+            "inline-block";
+
+        nav.innerHTML = `
+
+            <button
+                class="primary"
+                onclick="openLogin()">
+                Login
+            </button>
+
+        `;
+
+        return;
+    }
+
+
+    const profile =
+        await getProfile();
+
+
+    createBtn.style.display =
+        "none";
+
+
+    nav.innerHTML = `
+
+        <button
+            class="secondary"
+            onclick="openAccount()">
+
+            👤 ${
+                profile?.full_name || "Account"
+            }
+
+        </button>
+
+        <button
+            class="logout"
+            onclick="logoutUser()">
+
+            Logout
+
+        </button>
+
+    `;
+
+}
+
+
+/* ===============================
+   ACCOUNT
+================================ */
+
+async function openAccount(){
+
+    const profile =
+        await getProfile();
+
+    if(!profile){
+        return;
+    }
+
+    document.getElementById(
+        "accountInfo"
+    ).innerHTML = `
+
+        <b>Name:</b>
+        ${profile.full_name}
+
+        <br>
+
+        <b>User ID:</b>
+        ${profile.user_id}
+
+        <br>
+
+        <b>Role:</b>
+        ${profile.role}
+
+    `;
+
+    document.getElementById(
+        "accountModal"
+    ).style.display =
+        "flex";
+
+}
+
+
+/* ===============================
+   LOGOUT
+================================ */
+
+async function logoutUser(){
+
+    await supabaseClient.auth.signOut();
+
+    closeAccount();
+
+    await updateUI();
+
+}
+
+
+/* ===============================
+   BUY
+================================ */
+
+async function buyProduct(){
+
+    const user =
+        await getCurrentUser();
+
+    if(!user){
+
+        openLogin();
+
+        return;
+    }
+
+    alert(
+        "Checkout system next step mein connect karenge."
+    );
+
+}
+
+
+/* ===============================
+   MODALS
+================================ */
+
+function openRegister(){
+
+    document.getElementById(
+        "registerModal"
+    ).style.display =
+        "flex";
+
+}
+
+function closeRegister(){
+
+    document.getElementById(
+        "registerModal"
+    ).style.display =
+        "none";
+
+}
+
+function openLogin(){
+
+    document.getElementById(
+        "loginModal"
+    ).style.display =
+        "flex";
+
+}
+
+function closeLogin(){
+
+    document.getElementById(
+        "loginModal"
+    ).style.display =
+        "none";
+
+}
+
+function closeAccount(){
+
+    document.getElementById(
+        "accountModal"
+    ).style.display =
+        "none";
+
+}
+
+function scrollProducts(){
+
+    document.getElementById(
+        "products"
+    ).scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* ===============================
+   PAGE LOAD
+================================ */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async function(){
+
+        await updateUI();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
